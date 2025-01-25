@@ -58,10 +58,10 @@ Resourecs:-
 
 - csv file in Resources Folder
 ----------------------------------------------
-HTML Page:
+HTML Page (Getdata.html):
 
 path:
-project root
+- project root
 
 scripts:
 - jquery
