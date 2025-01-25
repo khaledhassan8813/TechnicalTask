@@ -22,33 +22,20 @@ namespace Application.Services
         }
         public async Task<List<UnifiedDataModel>> GetUnifiedDataAsync(string name = null, string phone = null, string country = null)
         {
-            //// Retrieve data from both repositories concurrently
-            //var csvTask = _csvRepository.GetCsvDataAsync(); // Task for CSV data
-            //var sqlTask = _sqlRepository.GetAllAsync();     // Task for SQL data
-
-            //// Await both tasks to complete
-            //await Task.WhenAll(csvTask, sqlTask);
-
-            //// Combine the results from both tasks and apply filters
-            //var unifiedData = csvTask.Result.Concat(sqlTask.Result)
-            //    .Where(person => FilterByCriteria(person, name, phone, country))
-            //    .ToList();
-
-            //return unifiedData;
-
-
             // Retrieve data from both repositories concurrently
             var csvTask = _csvRepository.GetCsvDataAsync(); // Task for CSV data
+            var sqlTask = _sqlRepository.GetAllAsync();     // Task for SQL data
 
             // Await both tasks to complete
-            await Task.WhenAll(csvTask);
+            await Task.WhenAll(csvTask, sqlTask);
 
             // Combine the results from both tasks and apply filters
-            var unifiedData = csvTask.Result
+            var unifiedData = csvTask.Result.Concat(sqlTask.Result)
                 .Where(person => FilterByCriteria(person, name, phone, country))
                 .ToList();
 
             return unifiedData;
+
         }
 
         #region privte
